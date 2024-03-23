@@ -14,29 +14,32 @@ import Profile from "./routes/Profile/ProfilePage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const init = async() => {
+  const init = async () => {
     await auth.authStateReady();
-    setIsLoading(false)
-  }
-  useEffect(()=>{
+    setIsLoading(false);
+  };
+  useEffect(() => {
     init();
-  },[]);
+  }, []);
   return (
-    <>{isLoading ? <>Loading</>:(
-      <Routes>
-        <Route path="/" element={<Layout />}>
+    <>
+      {isLoading ? (
+        <>Loading</>
+      ) : (
+        <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/workspace" element={<WorkSpace />} />
-          <Route path="/whiteboard" element={<WhiteBoard />} />
-          <Route path="/profile" element={<Profile/>}/>
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/find-family" element={<FindFamily />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/workspace" element={<WorkSpace />} />
+            <Route path="/whiteboard" element={<WhiteBoard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/" element={<ProtectedRoute />}>
+              <Route path="/find-family" element={<FindFamily />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    )}
+        </Routes>
+      )}
     </>
   );
 }
