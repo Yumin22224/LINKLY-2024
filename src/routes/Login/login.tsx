@@ -137,14 +137,14 @@ export default function Login() {
           onChange={onChange}
           value={email}
           type="email"
-          name="이메일을 입력하세요"
+          name="email"
           placeholder="Email"
         ></Input>{" "}
         <Input
           onChange={onChange}
           value={password}
           type="password"
-          name="비밀번호를 입력하세요"
+          name="password"
           placeholder="password"
         ></Input>
         <SubmitInput type="submit" value="로그인" />

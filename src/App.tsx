@@ -28,20 +28,11 @@ function App() {
         <>Loading</>
       ) : (
         <Routes>
-<<<<<<< HEAD
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/" element={<Layout />}>
             <Route path="/firstpage" element={<FirstPage />} />
-            {/* <Route path="/home" element={<Home />} /> */}
-            <Route path="/workspace" element={<WorkSpace />} />
-            <Route path="/whiteboard" element={<WhiteBoard />} />
-            {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/" element={<ProtectedRoute />}>
-=======
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/" element={<Layout />}>
->>>>>>> a2e9790981430edc9dd0017181597bc1bd40dc31
               <Route path="/find-family" element={<FindFamily />} />
               <Route path="/home" element={<Home />} />
               <Route path="/workspace" element={<WorkSpace />} />
