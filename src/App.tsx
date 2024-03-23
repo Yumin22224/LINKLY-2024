@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { auth } from "./routes/firebase";
 import Layout from "./routes/NavBar";
 import FirstPage from "./routes/Login/firstpage";
+import Home from "./routes/Home/HomePage";
+import Profile from "./routes/Profile/ProfilePage";
 import Whiteboard from "./routes/WhiteBoard/WhiteBoardPage";
 
 function App() {
@@ -27,16 +29,17 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<ProtectedRoute />}>
-            <Route path ="/" element={<Layout />}>
-            <Route path="/find-family" element={<FindFamily />} />
-            <Route path="/workspace" element={<WorkSpace />} />
-            <Route path="/firstpage" element={<FirstPage />} />
-            <Route path="/whiteboard" element={<Whiteboard />} />
+            <Route path="/" element={<Layout />}>
+              <Route path="/find-family" element={<FindFamily />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/workspace" element={<WorkSpace />} />
+              <Route path="/firstpage" element={<FirstPage />} />
+              <Route path="/whiteboard" element={<Whiteboard />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
-
         </Routes>
       )}
     </>
