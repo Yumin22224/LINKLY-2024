@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../firebase";
 
-const LoginForm = styled.div` 
+const LoginForm = styled.form` 
     display: flex;
     justify-content: center;
     align-items: center;

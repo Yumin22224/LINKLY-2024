@@ -7,13 +7,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/create-account">
-          <CreateAccount />
-        </Route>
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/create-account" element={<CreateAccount />}/>
       </Routes>
     </>
   );
