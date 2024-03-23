@@ -14,10 +14,9 @@ export const Error =styled.span`
 
 const LoginForm = styled.form` 
     display: flex;
+    flex-direction:column;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
 `
 const Input = styled.input`
     margin: 10px 20px;
