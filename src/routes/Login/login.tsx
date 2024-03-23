@@ -21,14 +21,21 @@ const Image = styled.div`
   height: 28px;
   left: 142px;
   right: 142px;
+
+  margin-left: 120px;
+  margin-right: 120px;
   margin-top: 71px;
   background-size: 100%;
   display: inline-block;
 `;
 
 const Content1 = styled.div`
-  width: 184px;
+  width: 220px;
   height: 58px;
+  margin-top: 50px;
+  margin-left: 120px;
+  margin-right: 120px;
+  display: inline-block;
   align-content: center;
   align-items: center;
 `;
@@ -36,9 +43,15 @@ const Content1 = styled.div`
 const Content2 = styled.div`
   width: 83px;
   height: 38px;
+  bottom: 560px;
+  color: #11eae0;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 120px;
+  margin-right: 120px;
+  display: inline-block;
   align-content: center;
   align-items: center;
-  margin-top: 8px;
 `;
 
 const LoginForm = styled.form`
@@ -46,14 +59,36 @@ const LoginForm = styled.form`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 70vh;
   flex-direction: column;
+  margin-top: 20px;
 `;
 const Input = styled.input`
+  width: 317px;
   margin: 10px 20px;
   padding: 10px;
+  bottom: 293px;
+  border: none;
+  margin-top: 20px;
+  border-radius: 10px;
+`;
+const SubmitInput = styled.input`
+  width: 317px;
+  height: 56.4px;
+  margin-top: 30px;
+  border: none;
+  background-color: #11eae0;
+  color: #ffffff;
+  border-radius: 20px;
 `;
 
+const Memberegister = styled.input`
+  width: 317px;
+  height: 56.4px;
+  margin-top: 10px;
+  background-color: #ffffff;
+  border: none;
+`;
 export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -90,25 +125,30 @@ export default function Login() {
       <Image></Image>
       <LoginForm onSubmit={onSubmit}>
         <Content1>
-          우리 가족만의 <br />
-          이야기가 모인 공간,
+          <h2>
+            우리 가족만의 <br />
+            이야기가 모인 공간,
+          </h2>
         </Content1>
-        <Content2>링클리</Content2>
+        <Content2>
+          <h2>링클리</h2>
+        </Content2>
         <Input
           onChange={onChange}
           value={email}
           type="email"
-          name="email"
+          name="이메일을 입력하세요"
           placeholder="Email"
-        ></Input>
+        ></Input>{" "}
         <Input
           onChange={onChange}
           value={password}
           type="password"
-          name="password"
+          name="비밀번호를 입력하세요"
           placeholder="password"
         ></Input>
-        <Input type="submit" value="login" />
+        <SubmitInput type="submit" value="로그인" />
+        <Memberegister type="submit" value="회원가입" />
       </LoginForm>
       {error !== "" ? <Error>{error}</Error> : null}
     </>
