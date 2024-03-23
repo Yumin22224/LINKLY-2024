@@ -1,4 +1,5 @@
-import { taskList } from "../../DataSet";
+import { useState } from "react";
+import { FamilyTaskList, MyTaskList } from "../../DataSet";
 import AddTask from "./AddTask";
 import Task from "./Task/Task";
 import styled from "styled-components";
@@ -18,7 +19,7 @@ const StyledTitle = styled.h2`
   align-self: flex-start;
   margin-top: 0;
 `;
-const StyledSubTitle = styled.div`
+const StyledSubTitleBox = styled.div`
   display: flex;
   div {
     font-weight: 400;
@@ -28,6 +29,11 @@ const StyledSubTitle = styled.div`
   }
   align-self: flex-start;
   margin-bottom: 10px;
+  color: #909090;
+`;
+
+const StyledSubTitle = styled.div<{ $select: boolean }>`
+  ${(props) => props.$select && `color: black;`}
 `;
 
 const Header = styled.div`
@@ -40,29 +46,42 @@ const Header = styled.div`
 `;
 
 const StyledTasks = styled.div`
-  width: 310px;
-  overscroll-behavior: contain;
-  overflow-y: auto;
+  width: 100%;
+
+  //overflow-y: auto;
   &::-webkit-scrollbar {
     width: 0;
   }
 `;
 
 const WorkSpace = () => {
+  const [select, setSelect] = useState(1);
+  const [familyTaskList, setFamilyTaskList] = useState(FamilyTaskList);
+
+  const handleClick = (num: number) => {
+    setSelect(num);
+  };
   return (
     <Layout>
       <Header>
         <StyledTitle>워크스페이스</StyledTitle>
-        <StyledSubTitle>
-          <div>가족 업무</div>
-          <div>내 업무</div>
-        </StyledSubTitle>
+        <StyledSubTitleBox>
+          <StyledSubTitle $select={select === 1} onClick={() => handleClick(1)}>
+            가족 업무
+          </StyledSubTitle>
+          <StyledSubTitle $select={select === 2} onClick={() => handleClick(2)}>
+            내 업무
+          </StyledSubTitle>
+        </StyledSubTitleBox>
       </Header>
       <StyledTasks>
-        {taskList.map((task) => (
-          <Task task={task} />
-        ))}
-        <AddTask />
+        {select === 1
+          ? familyTaskList.map((task) => <Task task={task} />)
+          : MyTaskList.map((task) => <Task task={task} />)}
+        <AddTask
+          setFamilyTaskList={setFamilyTaskList}
+          familyTaskList={familyTaskList}
+        />
       </StyledTasks>
     </Layout>
   );

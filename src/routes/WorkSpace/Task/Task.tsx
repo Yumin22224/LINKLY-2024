@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { family } from "../../../DataSet";
+import { useState } from "react";
+import OpenTask from "./OpenTask";
 
 const StyledTask = styled.div`
   display: grid;
@@ -9,25 +11,52 @@ const StyledTask = styled.div`
   background-color: #c4f8f2;
   margin-bottom: 20px;
   min-height: 70px;
+
+  padding: 5px;
+
+  align-items: center;
+  justify-items: center;
 `;
-const TaskTitle = styled.div``;
+const TaskTitle = styled.div`
+  grid-column: 1/2;
+  grid-row: 1/2;
 
-const TaskMember = styled.div``;
+  font-weight: bold;
+`;
 
-const TaskDuration = styled.div``;
+const TaskMember = styled.div`
+  grid-column: 1/2;
+  grid-row: 2/3;
+
+  font-size: small;
+`;
+
+const TaskDuration = styled.div`
+  grid-column: 2/3;
+  grid-row: 1/3;
+
+  font-weight: bold;
+`;
 
 const Task = ({ task }) => {
   const filteredFamilyMembers = family.memberList.filter((member) =>
-    task.members.includes(member.id)
+    task.member.includes(member.id)
   );
-  const memberList = filteredFamilyMembers.map((member) => member.name);
+  const memberList = filteredFamilyMembers.map((member) => member.name + " ");
 
-  return (
-    <StyledTask>
+  const [selected, setSelected] = useState(false);
+
+  const handleClick = () => {
+    setSelected(!selected);
+  };
+  return !selected ? (
+    <StyledTask onClick={handleClick}>
       <TaskTitle>{task.title}</TaskTitle>
       <TaskDuration>{task.duration}</TaskDuration>
       <TaskMember>{memberList}</TaskMember>
     </StyledTask>
+  ) : (
+    <OpenTask task={task} handleClick={handleClick} />
   );
 };
 
