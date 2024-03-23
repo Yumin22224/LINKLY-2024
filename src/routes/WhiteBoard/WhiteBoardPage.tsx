@@ -26,10 +26,9 @@ const Contname = styled.div`
 `;
 
 const PostCard = styled.div`
-  background-color: #c4f8f2;
+  background-color: #fffbaf;
   display: inline-block;
-
-  gap: 20px; // 카드 사이의 간격입니다.
+  gap: 20px;
   padding-top: 34px;
   padding-left: 14px;
   padding-right: 12px;
@@ -49,7 +48,7 @@ const FloatingButton = styled.button`
   justify-content: center;
   width: 60px;
   height: 60px;
-  bottom: 40px;
+  bottom: 100px;
   right: 40%;
   border-radius: 50px;
   font-size: 24px;
@@ -69,7 +68,7 @@ const ModalOverlay = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 120;
 `;
 
 const ModalContent = styled.div`
@@ -79,7 +78,7 @@ const ModalContent = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 300px;
-  z-index: 101;
+  z-index: 140;
 `;
 
 const CloseButton = styled.button`
@@ -172,17 +171,36 @@ interface Post {
   content: string;
 }
 
-const Logo = styled.img`
-  height: 25px;
-`;
 interface PostCardProps {
   post: Post;
 }
 
+const Contents = styled.div`
+  width: 135px;
+  height: 95px;
+  margin-left: 14px;
+  margin-right: 12px;
+  overflow: hidden;
+  text-align: left;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: inline-block;
+`;
+const Image2 = styled.div`
+  position: relative;
+  background-image: url(${Image1});
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  left: 70px;
+  background-size: 160%;
+`;
 const PostCardComponent: React.FC<PostCardProps> = ({ post }) => (
   <PostCard>
-    {/* <h3>{post.title}</h3> */}
-    <p>{post.content}</p>
+    <Contents>가나다SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS</Contents>
+    <Good>
+      <Image2></Image2>
+    </Good>
   </PostCard>
 );
 
