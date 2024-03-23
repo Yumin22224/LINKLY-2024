@@ -31,7 +31,6 @@ const Content1 = styled.div`
   height: 58px;
   align-content: center;
   align-items: center;
-  margin-top: 115px;
 `;
 
 const Content2 = styled.div`

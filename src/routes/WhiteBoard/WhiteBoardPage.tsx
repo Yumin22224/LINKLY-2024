@@ -209,7 +209,6 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
-// 컴포넌트 이름을 PascalCase로 변경했습니다.
 export default function Whiteboard() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);

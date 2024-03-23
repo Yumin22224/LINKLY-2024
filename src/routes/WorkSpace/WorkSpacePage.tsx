@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Calendar from "react-calendar";
 import { FamilyTaskList, MyTaskList } from "../../DataSet";
 import AddTask from "./AddTask";
 import Task from "./Task/Task";
@@ -10,6 +11,7 @@ const Layout = styled.div`
   }
 
   overflow-y: hidden;
+  margin-bottom: 60px;
 `;
 
 const StyledTitle = styled.h2`
@@ -54,6 +56,10 @@ const StyledTasks = styled.div`
   }
 `;
 
+const StyledCalendar = styled(Calendar)`
+  margin-bottom: 10px;
+`;
+
 const WorkSpace = () => {
   const [select, setSelect] = useState(1);
   const [familyTaskList, setFamilyTaskList] = useState(FamilyTaskList);
@@ -74,6 +80,7 @@ const WorkSpace = () => {
           </StyledSubTitle>
         </StyledSubTitleBox>
       </Header>
+      <StyledCalendar />
       <StyledTasks>
         {select === 1
           ? familyTaskList.map((task) => <Task task={task} />)
