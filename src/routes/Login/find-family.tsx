@@ -1,24 +1,21 @@
 import styled from "styled-components";
 import { auth, db } from "../firebase";
-import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 
 const Form = styled.form``;
-const Input = styled.input``;
+const Input = styled.input`
+    margin: 10px 20px;
+    padding: 10px;
+`
 
 export default function FindFamily() {
   const [familyId, setFamilyId] = useState("");
   const [familyName, setFamilyName] = useState("");
-  const [familyIds, setFamilyIds] = useState<string[]>([]);
-  const fetchFamilies  =async () => {
-    const tweetsQuery = query(collection(db,"tweets"));
-    await onSnapshot(tweetsQuery, (snapshot) => {
-        setFamilyIds(snapshot.docs.map((doc) => doc.id));
-    })}
   const onSubmit = async () => {
     const user = auth.currentUser;
-    await fetchFamilies();
-    if (user === null || familyIds.includes(familyId)) return;
+    const snapshot = await getDoc(doc(db,'families',familyId))
+    if ( user === null || !snapshot.exists() ||snapshot.data()?.memberList.includes(user.uid)) return;
     await addDoc(collection(db, "users"), {
       id: user.uid,
       familyId: familyId,
@@ -54,10 +51,12 @@ export default function FindFamily() {
           value={familyId}
           name="familyId"
         ></Input>
+        <Input type="submit"></Input>
       </Form>
+      Create Family Group
       <Form onSubmit={onCreate}>
         <Input onChange={onChange} type="text" value={familyName} name="familyName" ></Input>
-        <Input type="submit">Create Family</Input>
+        <Input type="submit"></Input>
       </Form>
     </>
   );
