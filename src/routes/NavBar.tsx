@@ -86,7 +86,7 @@ const ProfileIcon = styled.div<{ $isCurPage: boolean }>`
   ${(props) =>
     props.$isCurPage
       ? `background-image: url(${curProfile});`
-      : `background-image:url(${Profile});`}
+      : `background-image: url(${Profile});`}
 `;
 
 //HomePage === Home / whiteboard === Pin / workspace === Add / Profile === profile

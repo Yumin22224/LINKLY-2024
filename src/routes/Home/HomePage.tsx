@@ -143,6 +143,7 @@ const AnswerContainer = styled.div`
   margin-top: 10px;
   padding: 20px;
   text-align: left;
+  z-index:1000;
 
   .author {
   }
@@ -153,17 +154,22 @@ const AnswerContainer = styled.div`
 `;
 
 const Answer = ({ answer }) => {
-  return (
-    <AnswerContainer>
-      <div className="author">김아무개1</div>
-      <div className="content">{answer}</div>
-    </AnswerContainer>
-  );
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        {open && <Background />}
+        <AnswerContainer onClick={() => setOpen(true)}>
+          <div className="author">김아무개1</div>
+          <div className="content">{answer}</div>
+        </AnswerContainer>
+      </>
+    );
 };
 
 const Home = () => {
   const [open, setOpen] = useState(false);
-
+    const [answerCmt, setAnswerCmt] = useState(0);
+    const [selectedAns, setSelectedAns] = useState(0);
   const [answerList, setAnswerList] = useState([]);
   return (
     <>
