@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// useNavigate를 사용하려면 react-router-dom을 import해야 합니다.
-// 만약 라우터를 사용하지 않는다면, useNavigate와 navigate를 제거하십시오.
-import { useNavigate } from "react-router-dom";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -14,6 +11,12 @@ const BoardContainer = styled.div`
 const contname = styled.div`
   width: 100%;
   padding: 10px;
+`;
+
+const SearchBar = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
 `;
 
 const PostCard = styled.div`
@@ -113,38 +116,36 @@ const PostCardComponent: React.FC<PostCardProps> = ({ post }) => (
   </PostCard>
 );
 
-// 컴포넌트 이름을 PascalCase로 변경했습니다.
-export default function Whiteboard() {
-  const navigate = useNavigate();
+const whiteboard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMemo, setNewMemo] = useState("");
-  // 게시물 데이터
+
+  // 모달 토글 함수
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  // 메모 저장 함수
+  const handleSaveMemo = (e: React.FormEvent) => {
+    e.preventDefault();
+    // 여기에 메모 저장 로직을 구현할 수 있습니다. 예를 들어, 서버로 전송하거나 상태에 저장합니다.
+    console.log(newMemo); // 현재는 콘솔에 출력
+    setNewMemo(""); // 메모 필드 초기화
+    toggleModal(); // 모달 닫기
+  };
+
   const posts: Post[] = [
     { id: 1, title: "게시물 1", content: "내용 1" },
     { id: 2, title: "게시물 2", content: "내용 2" },
     // ... 추가 게시물 데이터 ...
   ];
 
-  // 모달을 여닫는 함수
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  // 메모 저장 함수
-  const handleSaveMemo = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(newMemo); // 현재는 콘솔에 출력
-    setNewMemo(""); // 메모 필드 초기화
-    toggleModal(); // 모달 닫기
-    // 메모 저장 후 메인 페이지로 이동하는 로직을 추가할 수 있습니다.
-    // navigate('/');
-  };
-
   return (
     <BoardContainer>
-      {/* <SearchBar type="text" placeholder="검색" /> */}
+      <SearchBar type="text" placeholder="검색" />
       {posts.map((post) => (
         <PostCardComponent key={post.id} post={post} />
       ))}
       <FloatingButton onClick={toggleModal}>+</FloatingButton>
+
       {isModalOpen && (
         <ModalOverlay onClick={toggleModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -163,4 +164,6 @@ export default function Whiteboard() {
       )}
     </BoardContainer>
   );
-}
+};
+
+export default whiteboard;

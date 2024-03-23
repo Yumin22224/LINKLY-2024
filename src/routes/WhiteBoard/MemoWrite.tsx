@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Modal from 'react-modal';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Modal from "react-modal";
 
 // 모달 스타일을 위한 커스텀 스타일
 const customStyles = {
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
     zIndex: 1000, // 다른 요소들 위에 렌더링하기 위해 z-index 설정
   },
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '20px',
-    width: '80%',
-    maxWidth: 'none',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "20px",
+    width: "80%",
+    maxWidth: "none",
   },
 };
 
@@ -39,7 +39,7 @@ const MemoTextArea = styled.textarea`
   border: 1px solid #ccc;
 `;
 
-Modal.setAppElement('#root'); // 모달을 바인딩할 앱 요소 설정
+Modal.setAppElement("#root"); // 모달을 바인딩할 앱 요소 설정
 
 const App: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -65,10 +65,7 @@ const App: React.FC = () => {
         <CloseButton onClick={closeModal}>X</CloseButton>
         <h2>오늘의 질문질문질문</h2>
         <p>답변을 입력하세요.</p>
-        <MemoTextArea
-          value={memo}
-          onChange={(e) => setMemo(e.target.value)}
-        />
+        <MemoTextArea value={memo} onChange={(e) => setMemo(e.target.value)} />
         <button onClick={closeModal}>저장</button>
       </Modal>
     </div>
