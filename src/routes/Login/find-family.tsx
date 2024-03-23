@@ -19,6 +19,7 @@ export default function FindFamily() {
     await addDoc(collection(db, "users"), {
       id: user.uid,
       familyId: familyId,
+      username: user.displayName
     });
   };
   const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +40,7 @@ export default function FindFamily() {
     await addDoc(collection(db, "users"), {
       id: user.uid,
       familyId: doc.id,
+      username: user.displayName
     });
   };
   return (

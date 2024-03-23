@@ -58,7 +58,7 @@ const TodayQ = styled.div`
   }
 `;
 
-const Background = styled.div`
+const Background = styled.div<{ $show: boolean }>`
   filter: opacity(50%);
   background-color: black;
   width: 100vw;
@@ -67,6 +67,8 @@ const Background = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+
+  display: ${({ $show }) => ($show ? "block" : "none")};
 `;
 
 const Memo = styled.div`
@@ -122,7 +124,7 @@ const AddModal = ({ setOpen, setAnswerList, answerList }) => {
 
   return (
     <>
-      <Background onClick={() => setOpen(false)} />
+      <Background onClick={() => setOpen(false)} $show={true} />
       <Memo>
         <div className="question">
           Q. 어린 시절 가장 좋았던 기억은 무엇인가요?
@@ -138,12 +140,11 @@ const AddModal = ({ setOpen, setAnswerList, answerList }) => {
   );
 };
 
-const AnswerContainer = styled.div`
+const AnswerContainer = styled.div<{ $open: boolean }>`
   background-color: #11ead0;
   margin-top: 10px;
   padding: 20px;
   text-align: left;
-  z-index:1000;
 
   .author {
   }
@@ -151,25 +152,62 @@ const AnswerContainer = styled.div`
   .content {
     font-size: 22px;
   }
+  ${(props) => props.$open && "height: 250px;"}
+`;
+
+const CommentContainer = styled.div`
+  margin-top: 10px;
+`;
+
+const Comment = styled.div`
+  background-color: white;
+  display: flex;
+
+  .comment {
+    margin-left: 10px;
+  }
+  .profile {
+    width: 50px;
+    height: 50px;
+    background-color: #c4f8f2;
+  }
+  height: 50px;
+  line-height: 3.2;
+`;
+
+const Body = styled.div`
+  z-index: 1000;
+
 `;
 
 const Answer = ({ answer }) => {
-    const [open, setOpen] = useState(false);
-    return (
-      <>
-        {open && <Background />}
-        <AnswerContainer onClick={() => setOpen(true)}>
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Body>
+        <AnswerContainer $open={open} onClick={() => setOpen(!open)}>
           <div className="author">김아무개1</div>
           <div className="content">{answer}</div>
         </AnswerContainer>
-      </>
-    );
+        {open && (
+          <CommentContainer>
+            <Comment>
+              <div className="profile" />
+              <div className="comment">재미있었겠다</div>
+            </Comment>
+          </CommentContainer>
+        )}
+      </Body>
+
+      <Background $show={open} onClick={() => setOpen(!open)} />
+    </>
+  );
 };
 
 const Home = () => {
   const [open, setOpen] = useState(false);
-    const [answerCmt, setAnswerCmt] = useState(0);
-    const [selectedAns, setSelectedAns] = useState(0);
+  const [answerCmt, setAnswerCmt] = useState(0);
+  const [selectedAns, setSelectedAns] = useState(0);
   const [answerList, setAnswerList] = useState([]);
   return (
     <>

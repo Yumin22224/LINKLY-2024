@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // useNavigate를 사용하려면 react-router-dom을 import해야 합니다.
 // 만약 라우터를 사용하지 않는다면, useNavigate와 navigate를 제거하십시오.
-import { useNavigate } from "react-router-dom";
 import Image1 from "../image/Group 65.png";
+import { Unsubscribe } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 
 const BoardContainer = styled.div`
   display: inline-block;
@@ -57,7 +59,7 @@ const FloatingButton = styled.button`
   cursor: pointer;
 `;
 
-const ModalOverlay = styled.form`
+const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -90,11 +92,6 @@ const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   cursor: pointer;
-`;
-
-const MemoForm = styled.form`
-  display: flex;
-  flex-direction: column;
 `;
 
 const MemoInput = styled.input`
@@ -145,7 +142,7 @@ const Name = styled.div`
   margin-top: 19px;
 `;
 
-const Date = styled.div`
+const Datee = styled.div`
   margin-top: 58.69px;
   text-align: center;
 `;
@@ -166,14 +163,14 @@ const Image = styled.div`
 `;
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
+  author: string;
+  date: Date;
+  likeCnt: string[];
 }
 
-interface PostCardProps {
-  post: Post;
-}
 
 const Contents = styled.div`
   width: 135px;
@@ -195,14 +192,7 @@ const Image2 = styled.div`
   left: 70px;
   background-size: 160%;
 `;
-const PostCardComponent: React.FC<PostCardProps> = ({ post }) => (
-  <PostCard>
-    <Contents>가나다SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS</Contents>
-    <Good>
-      <Image2></Image2>
-    </Good>
-  </PostCard>
-);
+
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -210,61 +200,167 @@ const ButtonContainer = styled.div`
 `;
 
 export default function Whiteboard() {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMemo, setNewMemo] = useState("");
   // 게시물 데이터
-  const posts: Post[] = [
-    { id: 1, title: "게시물 1", content: "내용 1" },
-    { id: 2, title: "게시물 2", content: "내용 2" },
-  ];
-
+  const [posts,setPosts] = useState<Post[]>([]);
+  const [showProfile, setShowProfile] = useState(false);
+  const [memo, setmemo] = useState<any>();
+  useEffect(() => {
+    let unsubscribe: Unsubscribe | null = null;
+    const fetchPosts  =async () => {
+        const user = auth.currentUser;
+        if (user === null) return;
+        const snapshot = await getDoc(doc(db,'users',user.uid))
+        const postsQuery = query(
+            collection(db,"memos"),where("familyId","==",snapshot.data()?.familyId)
+        );
+        unsubscribe = onSnapshot(postsQuery, (snapshot) => {
+          const postss = snapshot.docs.map((docc) => {
+            const { title, content,author, date,likeCnt } = docc.data();
+            return {
+              title,
+              content,
+              id: docc.id,
+              author,
+              date,
+              likeCnt
+               // Convert id to number
+            };
+          });
+          setPosts(postss);
+        })
+    }
+    fetchPosts();
+    return () => {
+        unsubscribe && unsubscribe();
+    }
+}, []);
   // 모달을 여닫는 함수
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  // 메모 저장 함수
-  const handleSaveMemo = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(newMemo); // 현재는 콘솔에 출력
-    setNewMemo(""); // 메모 필드 초기화
-    toggleModal(); // 모달 닫기
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+    if (showProfile === true) {
+      setShowProfile(false);
+      setNewMemo("");
+      setmemo({});
+    };
   };
 
+  // 메모 저장 함수
+  const handleSaveMemo = async(e: React.MouseEvent) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    if (user === null) return;
+    if (newMemo === "") return;
+    if (e.currentTarget.id === "delete") {
+      setIsModalOpen(false);
+    } else if (e.currentTarget.id === "create") {
+      const snapshot = await getDoc(doc(db,'users',user.uid))
+      await addDoc(collection(db, "memos"), {
+        content: newMemo,
+        author : user.uid,
+        date : Date.now(),
+        likeCnt : [],
+        isPinned : false,
+        familyId: snapshot.data()?.familyId
+      })
+      setNewMemo("");
+    } else if (e.currentTarget.id === "edit") {
+        await updateDoc(doc(db,'memos',memo.postId),{
+          content: newMemo,
+        })}else if (e.currentTarget.id === "exist-delete"){
+        await deleteDoc(doc(db,'memos',memo.postId))
+      };}
+  const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const {target:{name,value}} = e;
+    if (name === "newMemo") {
+        setNewMemo(value);
+    }
+  }
+  const onPostClick = async(e: React.MouseEvent) => {
+    const postId = e.currentTarget.id;
+    const snapshot = await getDoc(doc(db,'memos',postId))
+    const usernme = await getDoc(doc(db,'users',snapshot.data()?.author))
+    const obj1 = snapshot.data();
+    obj1.postId = postId;
+    obj1.username = usernme.data()?.username
+    setNewMemo(snapshot.data()?.content);
+    setmemo(obj1);
+    setIsModalOpen(true);
+    setShowProfile(true);
+    console.log(showProfile);
+  }
+  const onlikeClick = async(e: React.MouseEvent) => {
+    const snapshot = await getDoc(doc(db,'memos',memo.postId))
+    const user = auth.currentUser;
+    if (user === null) return;
+    const likeList = snapshot.data()?.likeCnt;
+    console.log(likeList);
+    console.log(typeof likeList)
+    if (likeList.includes(user.uid)) {
+      const index = likeList.indexOf(user.uid);
+      likeList.splice(index,1);
+      setmemo((prev:any) => {
+        return {
+          ...prev,
+          likeCnt: likeList
+        }
+      });
+    } else {
+      likeList.push(user.uid);
+      setmemo((prev:any) => {
+        return {
+          ...prev,
+          likeCnt: likeList
+        }
+      });
+    }
+    await updateDoc(doc(db,'memos',memo.postId),{
+      likeCnt : likeList
+    })
+  }
   return (
     <>
       <Contname>
         <Header>화이트보드</Header>
         <Midheader>가족과 나누는 일상의 기록.</Midheader>
         <BoardContainer>
-          {/* <SearchBar type="text" placeholder="검색" /> */}
           {posts.map((post) => (
-            <PostCardComponent key={post.id} post={post} />
+              <PostCard key={post.id} id={post.id} onClick={onPostClick}>
+                <Contents>{post.content}</Contents>
+                <Good>
+                  <Image2></Image2>{post.likeCnt.length}
+                </Good>
+              </PostCard>
           ))}
           {isModalOpen && (
             <ModalOverlay onClick={toggleModal}>
-              <ModalContent onClick={(e) => e.stopPropagation()}>
+              <ModalContent onClick={(e) => {
+                e.stopPropagation()}}>
                 <CloseButton onClick={toggleModal}>×</CloseButton>
-                <MemoModal>
+                {showProfile ? (<MemoModal>
                   <Member>
                     <Photo></Photo>
-                    <Name></Name>
+                    <Name>{
+                      memo.username
+                      }</Name>
                   </Member>
-                </MemoModal>
-                <MemoForm onSubmit={handleSaveMemo}>
+                </MemoModal>) : null}
                   <MemoInput
                     value={newMemo}
-                    onChange={(e) => setNewMemo(e.target.value)}
+                    onChange={onChange}
+                    name="newMemo"
                     placeholder="화이트보드에 마음껏 메모하세요."
                   />
-                </MemoForm>
-                <Date></Date>
+                <Datee></Datee>
                 <Good>
-                  <Image></Image>
+                  <Image onClick={onlikeClick}></Image>{showProfile ? memo.likeCnt.length : null}
                 </Good>
               </ModalContent>
               <ButtonContainer>
-                <SaveButton type="submit">메모</SaveButton>;
-                <DeleteButton type="submit">메모 삭제</DeleteButton>;
+                {showProfile ? (<><SaveButton type="submit" id="edit" onClick={handleSaveMemo}>메모</SaveButton>
+                <DeleteButton type="submit" id="exist-delete" onClick={handleSaveMemo}>메모 삭제</DeleteButton></>) : (<><SaveButton type="submit" id="create" onClick={handleSaveMemo}>메모</SaveButton>
+                <DeleteButton type="submit" id="delete" onClick={handleSaveMemo}>메모 삭제</DeleteButton></>)}
               </ButtonContainer>
             </ModalOverlay>
           )}
