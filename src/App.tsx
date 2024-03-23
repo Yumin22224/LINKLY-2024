@@ -14,7 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/workspace" element={<WorkSpace />} />
-        <Route path="/" element={<ProtectedRoute children={undefined} />}>
+        <Route path="/" element={<ProtectedRoute />}>
           <Route path="/find-family" element={<FindFamily />} />
           <Route path="/whiteboard" element={<WhiteBoard />} />
         </Route>
