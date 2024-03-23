@@ -2,14 +2,17 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./routes/Login/login";
 import CreateAccount from "./routes/Login/create-account";
-import WhiteBoard from "./routes/WhiteBoard/WhiteBoardPage";
 import WorkSpace from "./routes/WorkSpace/WorkSpacePage";
 import ProtectedRoute from "./components/protected-route";
 import FindFamily from "./routes/Login/find-family";
 import { useEffect, useState } from "react";
 import { auth } from "./routes/firebase";
 import Layout from "./routes/NavBar";
+<<<<<<< Updated upstream
 import FirstPage from "./routes/Login/firstpage";
+=======
+import Whiteboard from "./routes/WhiteBoard/WhiteBoardPage";
+>>>>>>> Stashed changes
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +39,7 @@ function App() {
 =======
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
+<<<<<<< Updated upstream
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/workspace" element={<WorkSpace />} />
@@ -45,6 +49,12 @@ function App() {
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/find-family" element={<FindFamily />} />
             </Route>
+=======
+          <Route path="/workspace" element={<WorkSpace />} />
+          <Route path="/whiteboard" element={<Whiteboard />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/find-family" element={<FindFamily />} />
+>>>>>>> Stashed changes
           </Route>
         </Routes>
       )}
