@@ -8,42 +8,77 @@ const CreateAccountForm = styled.form``;
 const Input = styled.input``;
 
 export default function CreateAccount() {
-    const navigate = useNavigate();
-  const [username,setUsername] = useState("");
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
-  const onSubmit = async(e:React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [familyId, setFamilyId] = useState(null);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "" || email === "" || password === "") {
-        return ;
+    if (username === "" || email === "" || password === "" || familyId === "") {
+      return;
     }
     try {
-        const credentials = await createUserWithEmailAndPassword(auth,email,password);
-        await updateProfile(credentials.user, {
-            displayName: username
-        });
-        navigate("/");
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(credentials.user, {
+        displayName: username,
+      });
+      navigate("/find-family");
     } catch (e) {
-        console.log(e)
-    } 
-  }
-  const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const {target:{name,value}} = e;
-    if (name === "email") {
-        setEmail(value);
-    } else if (name === "password") {
-        setPassword(value);
-    } else if (name === "username") {
-        setUsername(value);
+      console.log(e);
     }
-}
-    return (
-  <>
-    <CreateAccountForm onSubmit={onSubmit}>
-        <Input onChange={onChange} value={username} type="text" name="username" ></Input>
-        <Input onChange={onChange} value={email} type="email" name="email"></Input>
-        <Input onChange={onChange} value={password} type="password" name="password"></Input>
-        <Input type="submit" value="Create Account"/>
-    </CreateAccountForm>
-  </>);
+  };
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = e;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    } else if (name === "username") {
+      setUsername(value);
+    } else if (name === "familyId") {
+      setFamilyId(value);
+    }
+  };
+  return (
+    <>
+      <CreateAccountForm onSubmit={onSubmit}>
+        <Input
+          onChange={onChange}
+          value={username}
+          type="text"
+          name="username"
+          placeholder="username"
+        ></Input>
+        <Input
+          onChange={onChange}
+          value={email}
+          type="email"
+          name="email"
+          placeholder="email"
+        ></Input>
+        <Input
+          onChange={onChange}
+          value={password}
+          type="password"
+          name="password"
+          placeholder="password"
+        ></Input>
+        <Input
+          onChange={onChange}
+          value={familyId}
+          type="number"
+          name="familyId"
+          placeholder="familyId"
+        ></Input>
+        <Input type="submit" value="Create Account" />
+      </CreateAccountForm>
+    </>
+  );
 }

@@ -11,24 +11,11 @@ const LoginForm = styled.form`
     width: 100vw;
     height: 100vh;
 `
-const UsernameInput = styled.input`
+const Input = styled.input`
     margin: 10px 20px;
     padding: 10px;
-    placeholder="아이디를 입력해주세요"
-    required
 `
 
-const PasswordInput = styled.input`
-    margin: 10px 20px;
-    padding: 10px;
-    placeholder="비밀번호를 입력하세요"
-    required
-`
-
-const SubmitBtn = styled.button`
-    padding: 10px 20px;
-    cursor: pointer;
-`
 
 export default function Login() {
     const navigate = useNavigate();
@@ -55,9 +42,9 @@ export default function Login() {
     return (
     <>
      <LoginForm onSubmit={onSubmit}>
-        <UsernameInput onChange={onChange} value={email} type="email" name="email">{email}</UsernameInput>
-        <PasswordInput onChange={onChange} value={password} type="password" name="password">{password}</PasswordInput>
-        <SubmitBtn></SubmitBtn>
+        <Input onChange={onChange} value={email} type="email" name="email" placeholder="Email"></Input>
+        <Input onChange={onChange} value={password} type="password" name="password" placeholder="password"></Input>
+        <Input type="submit" value="login"/>
      </LoginForm>
     </>);
 }
