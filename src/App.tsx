@@ -6,10 +6,20 @@ import WhiteBoard from "./routes/WhiteBoard/WhiteBoardPage";
 import WorkSpace from "./routes/WorkSpace/WorkSpacePage";
 import ProtectedRoute from "./components/protected-route";
 import FindFamily from "./routes/Login/find-family";
+import { useEffect, useState } from "react";
+import { auth } from "./routes/firebase";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const init = async() => {
+    await auth.authStateReady();
+    setIsLoading(false)
+  }
+  useEffect(()=>{
+    init();
+  },[]);
   return (
-    <>
+    <>{isLoading ? <>Loading</>:(
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
@@ -19,6 +29,7 @@ function App() {
           <Route path="/whiteboard" element={<WhiteBoard />} />
         </Route>
       </Routes>
+    )}
     </>
   );
 }
