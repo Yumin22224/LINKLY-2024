@@ -9,6 +9,8 @@ import FindFamily from "./routes/Login/find-family";
 import { useEffect, useState } from "react";
 import { auth } from "./routes/firebase";
 import Layout from "./routes/NavBar";
+import Home from "./routes/Home/HomePage";
+import Profile from "./routes/Profile/ProfilePage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,8 +27,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/workspace" element={<WorkSpace />} />
           <Route path="/whiteboard" element={<WhiteBoard />} />
+          <Route path="/profile" element={<Profile/>}/>
           <Route path="/" element={<ProtectedRoute />}>
             <Route path="/find-family" element={<FindFamily />} />
           </Route>

@@ -14,12 +14,15 @@ const NavDiv = styled.div`
   display: flex;
   position: fixed;
   bottom: 0;
-  width:310px;
+  width: 310px;
   justify-content: space-around;
-  z-index:100;
-  background-color:white;
-  padding-top:15px;
-  padding-bottom:20px;
+  align-items: center;
+  z-index: 100;
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const IconContainer = styled.div`

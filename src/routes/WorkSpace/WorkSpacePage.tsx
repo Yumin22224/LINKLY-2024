@@ -10,6 +10,7 @@ const Layout = styled.div`
   }
 
   overflow-y: hidden;
+  margin-bottom:60px;
 `;
 
 const StyledTitle = styled.h2`
