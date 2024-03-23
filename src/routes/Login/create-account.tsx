@@ -12,10 +12,9 @@ export default function CreateAccount() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [familyId, setFamilyId] = useState(null);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "" || email === "" || password === "" || familyId === "") {
+    if (username === "" || email === "" || password === "") {
       return;
     }
     try {
@@ -42,8 +41,6 @@ export default function CreateAccount() {
       setPassword(value);
     } else if (name === "username") {
       setUsername(value);
-    } else if (name === "familyId") {
-      setFamilyId(value);
     }
   };
   return (
@@ -69,13 +66,6 @@ export default function CreateAccount() {
           type="password"
           name="password"
           placeholder="password"
-        ></Input>
-        <Input
-          onChange={onChange}
-          value={familyId}
-          type="number"
-          name="familyId"
-          placeholder="familyId"
         ></Input>
         <Input type="submit" value="Create Account" />
       </CreateAccountForm>
