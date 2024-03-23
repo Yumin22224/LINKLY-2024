@@ -14,9 +14,9 @@ export default function CreateAccount() {
   const [password, setPassword] = useState("");
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "" || email === "" || password === "") {
+    if (username === "" || email === "" || password === "" || password.length < 6) {
       return;
-    }
+    } else if (password.length < 6) return alert("비밀번호는 6자 이상이어야 합니다.");
     try {
       const credentials = await createUserWithEmailAndPassword(
         auth,
