@@ -168,7 +168,7 @@ interface Post {
   content: string;
   author: string;
   date: Date;
-  likeCnt: number;
+  likeCnt: string[];
 }
 
 
@@ -260,7 +260,7 @@ export default function Whiteboard() {
         content: newMemo,
         author : user.uid,
         date : Date.now(),
-        likeCnt : 0,
+        likeCnt : [],
         isPinned : false,
         familyId: snapshot.data()?.familyId
       })
@@ -290,6 +290,35 @@ export default function Whiteboard() {
     setShowProfile(true);
     console.log(showProfile);
   }
+  const onlikeClick = async(e: React.MouseEvent) => {
+    const snapshot = await getDoc(doc(db,'memos',memo.postId))
+    const user = auth.currentUser;
+    if (user === null) return;
+    const likeList = snapshot.data()?.likeCnt;
+    console.log(likeList);
+    console.log(typeof likeList)
+    if (likeList.includes(user.uid)) {
+      const index = likeList.indexOf(user.uid);
+      likeList.splice(index,1);
+      setmemo((prev:any) => {
+        return {
+          ...prev,
+          likeCnt: likeList
+        }
+      });
+    } else {
+      likeList.push(user.uid);
+      setmemo((prev:any) => {
+        return {
+          ...prev,
+          likeCnt: likeList
+        }
+      });
+    }
+    await updateDoc(doc(db,'memos',memo.postId),{
+      likeCnt : likeList
+    })
+  }
   return (
     <>
       <Contname>
@@ -300,7 +329,7 @@ export default function Whiteboard() {
               <PostCard key={post.id} id={post.id} onClick={onPostClick}>
                 <Contents>{post.content}</Contents>
                 <Good>
-                  <Image2></Image2>
+                  <Image2></Image2>{post.likeCnt.length}
                 </Good>
               </PostCard>
           ))}
@@ -325,7 +354,7 @@ export default function Whiteboard() {
                   />
                 <Datee></Datee>
                 <Good>
-                  <Image></Image>
+                  <Image onClick={onlikeClick}></Image>{showProfile ? memo.likeCnt.length : null}
                 </Good>
               </ModalContent>
               <ButtonContainer>
