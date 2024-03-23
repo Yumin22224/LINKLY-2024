@@ -55,7 +55,7 @@ const PostCardComponent: React.FC<PostCardProps> = ({ post }) => {
 
 const App: React.FC = () => {
   // 예시 게시물 데이터
-  const posts: Post[] = [   
+  const posts: Post[] = [
     { id: 1, title: "게시물 1", content: "내용 1" },
     { id: 2, title: "게시물 2", content: "내용 2" },
     // ... 추가 게시물
