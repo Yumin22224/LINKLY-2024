@@ -3,42 +3,62 @@ import styled from "styled-components";
 // useNavigate를 사용하려면 react-router-dom을 import해야 합니다.
 // 만약 라우터를 사용하지 않는다면, useNavigate와 navigate를 제거하십시오.
 import { useNavigate } from "react-router-dom";
+import Image1 from "../image/Group 65.png";
 
 const BoardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
+  flex-direction: row;
   align-items: center;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
+  box-sizing: content-box;
+  text-align: center;
 `;
 
-const contname = styled.div`
+const Header = styled.h2``;
+
+const Midheader = styled.h3``;
+
+const Contname = styled.div`
   width: 100%;
-  padding: 10px;
+
+  justify-content: center;
 `;
 
 const PostCard = styled.div`
-  width: 100%;
-  padding: 20px;
+  background-color: #c4f8f2;
+  display: inline-block;
+
+  gap: 20px; // 카드 사이의 간격입니다.
+  padding-top: 34px;
+  padding-left: 14px;
+  padding-right: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
   margin-bottom: 10px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 145px;
+  height: 180px;
 `;
 
 const FloatingButton = styled.button`
   position: fixed;
+  display: flex;
   align-items: center;
-  bottom: 20px;
-  right: 20px;
+  justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 30px;
+  bottom: 40px;
+  right: 40%;
+  border-radius: 50px;
   font-size: 24px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: #fffbaf;
   cursor: pointer;
 `;
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled.form`
   position: fixed;
   top: 0;
   left: 0;
@@ -46,22 +66,24 @@ const ModalOverlay = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 100;
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: #fffee8;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 500px;
+  max-width: 300px;
   z-index: 101;
 `;
 
 const CloseButton = styled.button`
+  justify-content: center;
   background: none;
   border: none;
   font-size: 24px;
@@ -76,24 +98,72 @@ const MemoForm = styled.form`
   flex-direction: column;
 `;
 
-const MemoInput = styled.textarea`
+const MemoInput = styled.input`
   font-size: 16px;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #ddd;
+  border: 0px;
   border-radius: 5px;
   height: 100px;
+  background: #fffee8;
 `;
 
 const SaveButton = styled.button`
   padding: 10px 20px;
-  background-color: #00bfff;
+  width: 161px;
+  height: 51px;
+  background-color: #ffd622;
   border: none;
-  border-radius: 5px;
+  border-radius: 17px;
   color: white;
   font-weight: bold;
   margin-top: 10px;
   cursor: pointer;
+`;
+
+const DeleteButton = styled.button`
+  padding: 10px 20px;
+  width: 161px;
+  height: 51px;
+  background-color: #ff4242;
+  border: none;
+  border-radius: 17px;
+  color: white;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+`;
+
+const MemoModal = styled.div``;
+
+const Member = styled.div``;
+
+const Photo = styled.div`
+  margin-top: 19px;
+`;
+
+const Name = styled.div`
+  margin-top: 19px;
+`;
+
+const Date = styled.div`
+  margin-top: 58.69px;
+  text-align: center;
+`;
+
+const Good = styled.div`
+  margin-top: 16px;
+  text-align: center;
+`;
+
+const Image = styled.div`
+  position: relative;
+  background-image: url(${Image1});
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  left: 150px;
+  background-size: 160%;
 `;
 
 interface Post {
@@ -102,16 +172,24 @@ interface Post {
   content: string;
 }
 
+const Logo = styled.img`
+  height: 25px;
+`;
 interface PostCardProps {
   post: Post;
 }
 
 const PostCardComponent: React.FC<PostCardProps> = ({ post }) => (
   <PostCard>
-    <h3>{post.title}</h3>
+    {/* <h3>{post.title}</h3> */}
     <p>{post.content}</p>
   </PostCard>
 );
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 // 컴포넌트 이름을 PascalCase로 변경했습니다.
 export default function Whiteboard() {
@@ -122,7 +200,6 @@ export default function Whiteboard() {
   const posts: Post[] = [
     { id: 1, title: "게시물 1", content: "내용 1" },
     { id: 2, title: "게시물 2", content: "내용 2" },
-    // ... 추가 게시물 데이터 ...
   ];
 
   // 모달을 여닫는 함수
@@ -134,33 +211,50 @@ export default function Whiteboard() {
     console.log(newMemo); // 현재는 콘솔에 출력
     setNewMemo(""); // 메모 필드 초기화
     toggleModal(); // 모달 닫기
-    // 메모 저장 후 메인 페이지로 이동하는 로직을 추가할 수 있습니다.
-    // navigate('/');
   };
 
   return (
-    <BoardContainer>
-      {/* <SearchBar type="text" placeholder="검색" /> */}
-      {posts.map((post) => (
-        <PostCardComponent key={post.id} post={post} />
-      ))}
+    <>
+      <Contname>
+        <Header>화이트보드</Header>
+        <Midheader>가족과 나누는 일상의 기록.</Midheader>
+        <BoardContainer>
+          {/* <SearchBar type="text" placeholder="검색" /> */}
+          {posts.map((post) => (
+            <PostCardComponent key={post.id} post={post} />
+          ))}
+          {isModalOpen && (
+            <ModalOverlay onClick={toggleModal}>
+              <ModalContent onClick={(e) => e.stopPropagation()}>
+                <CloseButton onClick={toggleModal}>×</CloseButton>
+                <MemoModal>
+                  <Member>
+                    <Photo></Photo>
+                    <Name></Name>
+                  </Member>
+                </MemoModal>
+                <MemoForm onSubmit={handleSaveMemo}>
+                  <MemoInput
+                    value={newMemo}
+                    onChange={(e) => setNewMemo(e.target.value)}
+                    placeholder="화이트보드에 마음껏 메모하세요."
+                  />
+                </MemoForm>
+                <Date></Date>
+                <Good>
+                  <Image></Image>
+                </Good>
+              </ModalContent>
+              <ButtonContainer>
+                <SaveButton type="submit">메모</SaveButton>;
+                <DeleteButton type="submit">메모 삭제</DeleteButton>;
+              </ButtonContainer>
+            </ModalOverlay>
+          )}
+        </BoardContainer>
+      </Contname>
+
       <FloatingButton onClick={toggleModal}>+</FloatingButton>
-      {isModalOpen && (
-        <ModalOverlay onClick={toggleModal}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <CloseButton onClick={toggleModal}>×</CloseButton>
-            <MemoForm onSubmit={handleSaveMemo}>
-              <h2>새 메모</h2>
-              <MemoInput
-                value={newMemo}
-                onChange={(e) => setNewMemo(e.target.value)}
-                placeholder="메모를 입력하세요..."
-              />
-              <SaveButton type="submit">저장</SaveButton>
-            </MemoForm>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-    </BoardContainer>
+    </>
   );
 }

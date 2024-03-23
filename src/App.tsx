@@ -6,11 +6,21 @@ import WhiteBoard from "./routes/WhiteBoard/WhiteBoardPage";
 import WorkSpace from "./routes/WorkSpace/WorkSpacePage";
 import ProtectedRoute from "./components/protected-route";
 import FindFamily from "./routes/Login/find-family";
+import { useEffect, useState } from "react";
+import { auth } from "./routes/firebase";
 import Layout from "./routes/NavBar";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const init = async() => {
+    await auth.authStateReady();
+    setIsLoading(false)
+  }
+  useEffect(()=>{
+    init();
+  },[]);
   return (
-    <>
+    <>{isLoading ? <>Loading</>:(
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/login" element={<Login />} />
@@ -22,6 +32,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+    )}
     </>
   );
 }
